@@ -1,4 +1,5 @@
-FROM maven:3.9.2-openjdk-17 AS builder
+FROM maven:3.9.2 AS builder
+
 COPY . .
 RUN mvn clean package
 
