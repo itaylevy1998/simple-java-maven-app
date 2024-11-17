@@ -16,7 +16,7 @@ jobs:
       
       # Step 2: Build the Docker image
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag my-image-name:$(date)
+        run: docker build . --file Dockerfile --tag my-image-name
       
       # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -27,5 +27,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag my-image-name:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/my-image-name:$(date +%s)
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name:$(date)
+          docker tag my-image-name:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/my-image-name
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name
