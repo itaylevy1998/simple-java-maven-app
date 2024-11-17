@@ -11,19 +11,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-    - uses: actions/checkout@v4
-    
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout code
+        uses: actions/checkout@v4
       
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      # Step 2: Build the Docker image
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      
+      # Step 3: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push Docker image
-      run: |
-        docker tag my-image-name:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/my-image-name:$(date +%s)
-        docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name:$(date +%s)
+      - name: Push Docker image
+        run: |
+          docker tag my-image-name:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/my-image-name:$(date +%s)
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name:$(date +%s)
