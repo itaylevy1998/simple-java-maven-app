@@ -50,7 +50,7 @@ jobs:
           PRODUCTION_IP: "3.75.141.29"
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: $PRODUCTION_IP
+          host: ${{ env.PRODUCTION_IP }}
           username: ${{ secrets.PRODUCTION_USERNAME }}
           key: ${{ secrets.PRODUCTION_KEY }}
           script: |
