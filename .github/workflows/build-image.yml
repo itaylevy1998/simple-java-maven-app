@@ -20,10 +20,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       
-      - name: Increment version
+      - name: Increment jar version
         run: ./changeVersion.sh
       
-      - name: Push to repo
+      - name: Push updated pom file to repo
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -31,7 +31,7 @@ jobs:
           git commit -m "updated version"
           git push
 
-      - name: Build the Docker image
+      - name: Build
         run: docker build . --file Dockerfile --tag my-image-name
       
       - name: Log in to Docker Hub
@@ -40,7 +40,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Push Docker image
+      - name: Publish
         run: |
           docker tag my-image-name ${{ secrets.DOCKER_USERNAME }}/my-image-name
           docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name
+      
+      - name: Deploy 
+      - env:
+          PRODUCTION_IP = "3.75.141.29"
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: $PRODUCTION_IP
+          username: ${{ secrets.PRODUCTION_USERNAME }}
+          key: ${{ secrets.PRODUCTION_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/my-image-name
+            docker run -d --name helloworld ${{ secrets.DOCKER_USERNAME }}/my-image-name
