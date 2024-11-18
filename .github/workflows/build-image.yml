@@ -46,8 +46,8 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/my-image-name
       
       - name: Deploy 
-      - env:
-          PRODUCTION_IP = "3.75.141.29"
+        env:
+          PRODUCTION_IP: "3.75.141.29"
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: $PRODUCTION_IP
